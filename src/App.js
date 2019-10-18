@@ -27,34 +27,37 @@ const particlesOptions = {
   }
 };
 
+const initialState = {
+  input: '',
+  imageURL: '',
+  box: {},
+  route: 'signin',
+  isSignedin: false,
+  user: {
+    id: '',
+    name: '',
+    email: '',
+    entries: 0,
+    joined: ''
+  }
+};
+
 class App extends Component {
 
   constructor() {
     super();
-    this.state = {
-      input: '',
-      imageURL: '',
-      box: {},
-      route: 'signin',
-      isSignedin: false,
-      user: {
-        id: '',
-        name: '',
-        email: '',
-        entries: 0,
-        joined: ''
-      }
-    };
+    this.state = initialState;
   }
 
   loadUser = (data) => {
     this.setState({ user: {
-      id: data.id,
-      name: data.name,
-      email: data.email,
-      entries: data.entries,
-      joined: data.joined
-    } });
+        id: data.id,
+        name: data.name,
+        email: data.email,
+        entries: data.entries,
+        joined: data.joined
+      } 
+    });
   }
 
   calculateFaceLocation = (data) => {
@@ -93,7 +96,8 @@ class App extends Component {
               })
             })
               .then(response => response.json())
-              .then(count => this.setState({ user: Object.assign(this.state.user, { entries: count })}));
+              .then(count => this.setState({ user: Object.assign(this.state.user, { entries: count })}))
+              .catch(console.log);
           }
 
           this.displayFaceBox(this.calculateFaceLocation(response));
@@ -102,8 +106,8 @@ class App extends Component {
   }
 
   onRouteChange = (route) => {
-    if (route === 'signin') {
-      this.setState({ isSignedin: false });
+    if (route === 'signout') {
+      this.setState(initialState);
     } else if (route === 'home') {
       this.setState({ isSignedin: true })
     }
